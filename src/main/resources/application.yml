@@ -1,3 +1,8 @@
 # 端口
 server:
   port: 18080
+
+# 日志打印级别
+logging:
+  level:
+    com.example.demo: DEBUG

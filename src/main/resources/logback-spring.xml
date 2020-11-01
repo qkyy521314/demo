@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds" debug="false">
+
+    <contextName>logback</contextName>
+
+    <property name="log_name" value="demo"/><!--日志文件名-->
+    <property name="log_path" value="log"/><!-- 如果在Windows环境下使用/开头的路径，将会被指定到项目所在的盘符 -->
+    <property name="log_pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] %logger{50} - %msg%n"/>
+    <property name="log_fileNamePattern" value="%d{yyyy-MM-dd}.%i.log"/>
+    <property name="log_maxFileSize" value="100MB"/>
+    <property name="log_maxHistory" value="30"/>
+
+    <!-- 输出到控制台 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder charset="UTF-8">
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 输出到log_name.log文件 -->
+    <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_path}/${log_name}.log</file>
+        <encoder charset="UTF-8">
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_path}/${log_name}-${log_fileNamePattern}</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${log_maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${log_maxHistory}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 输出到sql.log文件 -->
+    <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_path}/sql.log</file>
+        <encoder charset="UTF-8">
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_path}/sql-${log_fileNamePattern}</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${log_maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${log_maxHistory}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- root用来指定最基础的日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="APP"/>
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="SQL" />
+    </root>
+</configuration>
